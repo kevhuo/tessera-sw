@@ -8,6 +8,8 @@
 compile_error!("features `mock` and `session-ex-tests` cannot be enabled together");
 
 mod algo;
+#[cfg(feature = "sock")]
+mod ddi_sock_server_tests;
 #[cfg(not(feature = "session-ex-tests"))]
 mod partition_tests;
 #[cfg(not(feature = "session-ex-tests"))]

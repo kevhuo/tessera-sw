@@ -5,6 +5,15 @@
 # file (saved to target/nextest/<profile>/<path>) during CI runs.
 
 # profile for running all mock tests
+# `ddi_sock_server_tcp_integration` and `ddi_sock_server_unix_integration`
+# spawn the separately-built `ddi_sock_server` binary (see
+# `examples/sock/ddi_sock_server/README.md`). This profile's
+# `--workspace` invocation does not build that binary; they are only
+# exercised by the dedicated `ci-sock-ddi` profile, which builds it
+# first.
+[profile.ci-mock]
+default-filter = "not binary_id(tsra_ddi_sock::ddi_sock_server_tcp_integration) and not binary_id(tsra_ddi_sock::ddi_sock_server_unix_integration)"
+
 # Resiliency stress tests are timing-sensitive; reserve the whole runner so
 # they do not run in parallel with any other test or each other.
 [[profile.ci-mock.overrides]]
@@ -53,4 +62,14 @@ path = "junit.xml"
 
 # profile for running emu ddi tests
 [profile.ci-emu-ddi.junit]
+path = "junit.xml"
+
+# profile for running socket DDI tests against a live ddi_sock_server
+# process
+[profile.ci-sock-ddi.junit]
+path = "junit.xml"
+
+# profile for running tsra_api_tests's ddi_sock_server session tests
+# against a live ddi_sock_server process
+[profile.ci-api-sock.junit]
 path = "junit.xml"
